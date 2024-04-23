@@ -1,0 +1,40 @@
+        ** Reading from .pcap file **
+
+    let file = File::open("output.pcap").unwrap();
+    let mut reader = PcapReader::new(file).unwrap();
+
+    while let Some(Ok(packet)) = reader.next_packet() {
+        println!("Received packet with length {}", packet.data.len());
+    }
+
+    println!("Done!");
+
+
+    *** SAVE ***
+
+extern crate pcap;
+
+use pcap::{Capture, Device};
+use std::path::Path;
+
+fn main() {
+
+    let device = Device::lookup().unwrap().unwrap();
+    let mut cap = Capture::from_device(device.clone())
+        .unwrap()
+        .open()
+        .unwrap();
+
+    let path = Path::new("output.pcap");
+    let mut savefile = cap.savefile(path).unwrap();
+
+    while let Ok(packet) = cap.next_packet() {
+        println!("Received packet with length {}, Source: {}", packet.data.len(), packet.data[26..30].iter().map(|x| x.to_string()).collect::<Vec<String>>().join("."));
+
+        // Write the packet to the savefile
+        savefile.write(&packet);
+    }
+
+    println!("Done!");
+    
+}

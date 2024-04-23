@@ -8,3 +8,12 @@ edition = "2021"
 [dependencies]
 pcap = "1.3.0"
 pnet = "0.34.0"
+
+#for email
+lettre = "0.11"
+
+#for displaying time
+chrono = "0.4.38"
+
+csv = "1.3.0"
+ctrlc = "3.4"
